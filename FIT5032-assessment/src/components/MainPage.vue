@@ -8,7 +8,7 @@
           
           <li>Start</li>
           <li>About us </li>
-          <li>Login </li>
+          <li><a href="/login" class="text-primary">Login</a></li>
         </ul>
       </nav>
     </header>

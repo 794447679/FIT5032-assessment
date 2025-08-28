@@ -1,16 +1,16 @@
 <script setup>
 
 import MainPage from './components/MainPage.vue'
+import LoginPage from './components/LoginPage.vue'
 </script>
 
 <template>
   
   <div>
-    <MainPage />
+    <router-view />
    
     
-    
-   
+
   </div>
 </template>
 

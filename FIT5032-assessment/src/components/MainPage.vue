@@ -9,6 +9,8 @@
           <li>Start</li>
           <li>About us </li>
           <li><a href="/login" class="text-primary">Login</a></li>
+
+          <li><a href="/userprofile" class="text-primary">User profile</a></li>
         </ul>
       </nav>
     </header>

@@ -1,4 +1,9 @@
 <template>
+  <div class="mb-2">
+  <RouterLink to="/" class="btn btn-outline-secondary btn-sm">&larr; Back to Main Page</RouterLink>
+  </div>
+
+
   <div class="container mt-5">
     <div class="row justify-content-center">
       <!-- Bootstrap Responsiveness -->
@@ -7,6 +12,8 @@
         <h1 class="h4 text-center mb-4">Login</h1>
 
         <form @submit.prevent="onSubmit">
+
+          
           <!-- Username -->
           <div class="mb-3">
             <label for="username" class="form-label">Username</label>
@@ -46,6 +53,8 @@
           <div v-if="errorMessage" class="text-danger mt-3 text-center">
             {{ errorMessage }}
           </div>
+
+          
 
           <!-- test account show -->
           <div class="mt-4">    

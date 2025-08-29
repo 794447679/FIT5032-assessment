@@ -88,8 +88,8 @@ const accounts = [
 const onSubmit = () => {
   const findAccount = accounts.find(
     account =>
-       account.username === userData.username &&
-       account.password === userData.password
+       account.username === userData.value.username &&
+       account.password === userData.value.password
   )
   if (findAccount) {
     errorMessage.value = null

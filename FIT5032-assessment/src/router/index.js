@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainPage from '../components/MainPage.vue'
 import LoginPage from '../components/LoginPage.vue'
 import RegisterPage from '../components/RegisterPage.vue'
-import UserProfilePage from '@/components/UserProfile.vue'
+import UserProfilePage from '../components/UserProfile.vue'
 
 const routes = [
   { path: '/', redirect: '/main' },  

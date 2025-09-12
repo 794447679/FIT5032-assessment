@@ -1,36 +1,20 @@
 <template>
   <div>
-    <!-- Top navigation of the website -->
-    <header class="top-bar">
-      <nav class="bar-container">
-        <div class="site-name">Men's health</div>
-        <ul class="nav-links">
-          
-          <li>Start</li>
-          <li>About us </li>
-          <li><a href="/login" class="text-primary">Login</a></li>
-
-          <li><a href="/userprofile" class="text-primary">User profile</a></li>
-        </ul>
-      </nav>
-    </header>
-
-    <!-- The firsr screen  -->
+    <BHeader />
     <section class="main-section">
-      <h1>Welcome to Men's health </h1>
+      <h1>Welcome to Men's health</h1>
       <p>This is a website that teaches men how to manage their health.</p>
       <button>Click for more details</button>
     </section>
-
-
-
-
-    <!-- footer -->
     <footer class="page-footer">
       <p>© 2025 Men's health</p>
     </footer>
   </div>
 </template>
+
+<script setup>
+import BHeader from "@/components/Bheader.vue"
+</script>
 
 <style scoped>
 /* top */

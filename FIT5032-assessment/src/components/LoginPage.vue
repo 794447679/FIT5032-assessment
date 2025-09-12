@@ -1,39 +1,35 @@
 <template>
   <div class="mb-2">
-  <RouterLink to="/" class="btn btn-outline-secondary btn-sm">&larr; Back to Main Page</RouterLink>
+    <RouterLink to="/" class="btn btn-outline-secondary btn-sm">&larr; Back to Main Page</RouterLink>
   </div>
-
 
   <div class="container mt-5">
     <div class="row justify-content-center">
-      <!-- Bootstrap Responsiveness -->
       <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 col-xxl-4">
         
         <h1 class="h4 text-center mb-4">Login</h1>
 
         <form @submit.prevent="onSubmit">
-
-          
-          <!-- Username -->
+          <!-- email input -->
           <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
+            <label for="email" class="form-label">Email</label>
             <input
-              id="username"
-              type="text"
+              id="email"
+              type="email"
               class="form-control"
-              v-model="userData.username"
-              placeholder="Enter your username"
+              v-model="form.email"
+              placeholder="Enter your email"
             />
           </div>
 
-          <!-- Password -->
+          <!-- password input -->
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <input
               id="password"
               type="password"
               class="form-control"
-              v-model="userData.password"
+              v-model="form.password"
               placeholder="Enter your password"
             />
           </div>
@@ -43,24 +39,15 @@
             Login
           </button>
 
-          <!-- Sign up link -->
+          <!-- link to register -->
           <p class="text-center mt-3 small">
             Don't have an account? 
-            <a href="/register" class="text-primary fw-bold">Sign up</a>
+            <RouterLink to="/register" class="text-primary fw-bold">Sign up</RouterLink>
           </p>
 
-          <!-- Error message -->
-          <div v-if="errorMessage" class="text-danger mt-3 text-center">
-            {{ errorMessage }}
-          </div>
-
-          
-
-          <!-- test account show -->
-          <div class="mt-4">    
-            <p>Test Accounts:</p>
-            <p>Username: taixiangLin  Password: 123456</p>
-            <p>Username: admin        Password: 123456</p>
+          <!-- error message -->
+          <div v-if="errorMsg" class="text-danger mt-3 text-center">
+            {{ errorMsg }}
           </div>
         </form>
 
@@ -70,32 +57,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue"
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { useRouter } from "vue-router"
 
-const userData = ref({
-  username: '',
-  password: ''
+// simple form state
+const form = ref({
+  email: "",
+  password: ""
 })
 
-const errorMessage = ref(null)
+// track error messages
+const errorMsg = ref(null)
 
-// tesat account 
-const accounts = [
-  { username: 'taixiangLin', password: '123456' },
-  { username: 'admin', password: '123456' }
-]
+const auth = getAuth()
+const router = useRouter()
 
+// try to log in with Firebase
 const onSubmit = () => {
-  const findAccount = accounts.find(
-    account =>
-       account.username === userData.value.username &&
-       account.password === userData.value.password
-  )
-  if (findAccount) {
-    errorMessage.value = null
-    alert('Login success!')
-  } else {
-    errorMessage.value = 'Invalid username or password,please try again '
-  }
+  signInWithEmailAndPassword(auth, form.value.email, form.value.password)
+    .then((userCredential) => {
+      console.log("Login success:", userCredential.user)
+      errorMsg.value = null
+      alert("Login success!")
+      router.push("/") // redirect to home
+    })
+    .catch((error) => {
+      console.error("Login failed:", error.code, error.message)
+      errorMsg.value = "Invalid email or password. Please try again."
+    })
 }
 </script>

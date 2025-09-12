@@ -1,4 +1,8 @@
 <template>
+  <div class="mb-2">
+    <RouterLink to="/login" class="btn btn-outline-secondary btn-sm">&larr; Back to Login</RouterLink>
+  </div>
+
   <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 col-xxl-4">
@@ -6,143 +10,107 @@
         <h1 class="h4 text-center mb-4">Sign Up</h1>
 
         <form @submit.prevent="onRegister">
-          <!-- Username -->
+          <!-- email input -->
           <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
+            <label for="email" class="form-label">Email</label>
             <input
-              id="username"
-              type="text"
+              id="email"
+              type="email"
               class="form-control"
-              v-model="registerData.username"
-              placeholder="Enter a username"
-              @blur="() => validateUsername(true)"
-              @input="() => validateUsername(false)"
+              v-model="form.email"
+              placeholder="Enter email"
             />
-            <div v-if = "errors.username" class ="text-danger">{{errors.username}}</div>
+            <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
           </div>
 
-          <!-- Password -->
+          <!-- password input -->
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <input
               id="password"
               type="password"
               class="form-control"
-              v-model="registerData.password"
-              placeholder="Enter a password"
-              @blur="()=>validatePassword(true)"
-              @input="()=>validatePassword(false)"
+              v-model="form.password"
+              placeholder="Enter password"
             />
-            <div v-if = "errors.password" class ="text-danger">{{errors.password}}</div>
+            <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
           </div>
 
-          <!-- Confirm Password -->
+          <!-- confirm password -->
           <div class="mb-3">
             <label for="confirmPassword" class="form-label">Confirm Password</label>
             <input
               id="confirmPassword"
               type="password"
               class="form-control"
-              v-model="registerData.confirmPassword"
-              placeholder="Confirm your password"
-              @blur="()=>validateConfirmPassword(true)"
-              @input="()=>validateConfirmPassword(false)"
+              v-model="form.confirmPassword"
+              placeholder="Confirm password"
             />
-            <div v-if = "errors.confirmPassword" class ="text-danger">{{errors.confirmPassword}}</div>
+            <div v-if="errors.confirmPassword" class="text-danger">{{ errors.confirmPassword }}</div>
           </div>
 
-          <!-- Sign up button -->
-          <button type="submit" class="btn btn-success w-100">
-            Sign Up
-          </button>
-
-          <!-- Back to login -->
-          <p class="text-center mt-3 small">
-            Already have an account? 
-            <RouterLink to="/login" class="text-primary fw-bold">Login</RouterLink>
-          </p>
-
-          
+          <!-- sign up button -->
+          <button type="submit" class="btn btn-success w-100">Sign Up</button>
         </form>
-
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue"
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import { db } from "@/firebase"
+import { doc, setDoc } from "firebase/firestore"
+import { useRouter } from "vue-router"
 
-const registerData = ref({
-  username: '',
-  password: '',
-  confirmPassword: ''
+// form state
+const form = ref({
+  email: "",
+  password: "",
+  confirmPassword: ""
 })
 
+// error state
 const errors = ref({
-  username: null,
+  email: null,
   password: null,
-  confirmPassword: null,
+  confirmPassword: null
 })
 
+const auth = getAuth()
+const router = useRouter()
 
-const validateUsername = (blur) => {
-  if (registerData.value.username.length < 8) {
-    if (blur) errors.value.username = 'Username must be at least 8 characters'
-  } else {
-    errors.value.username = null
-  }
-
+// quick validation
+function validate() {
+  errors.value.email = !form.value.email.includes("@") ? "Enter a valid email" : null
+  errors.value.password = form.value.password.length < 6 ? "Password must be at least 6 chars" : null
+  errors.value.confirmPassword =
+    form.value.password !== form.value.confirmPassword ? "Passwords do not match" : null
+  return !errors.value.email && !errors.value.password && !errors.value.confirmPassword
 }
 
-const validatePassword = (blur) => {
-  const password = registerData.value.password  
-  const minLength = 8
-  const hasUppercase = /[A-Z]/.test(password);
-  const hasLowercase = /[a-z]/.test(password);
-  const hasNumber = /\d/.test(password);
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-    if (password.length < minLength) {
-    if (blur) errors.value.password = `Password must be at least ${minLength} characters long.`;
-  } else if (!hasUppercase) {
-    if (blur) errors.value.password = "Password must contain at least one uppercase letter.";
-  } else if (!hasLowercase) {
-    if (blur) errors.value.password = "Password must contain at least one lowercase letter.";
-  } else if (!hasNumber) {
-    if (blur) errors.value.password = "Password must contain at least one number.";
-  } else if (!hasSpecialChar) {
-    if (blur) errors.value.password = "Password must contain at least one special character.";
-  } else {
-    errors.value.password = null;
-  }
-};
-
-
-const validateConfirmPassword = (blur) => {
-  const confirmPassword = registerData.value.confirmPassword
-
-  if (!confirmPassword) {
-    if (blur) errors.value.confirmPassword = 'Please confirm your password'
-  } else if (confirmPassword !== registerData.value.password) {
-    if (blur) errors.value.confirmPassword = 'Passwords do not match'
-  } else {
-    errors.value.confirmPassword = null
-  }
-};
-
-
-
+// register new account
 const onRegister = () => {
+  if (!validate()) return
 
-  validateUsername(true)
-  validatePassword(true)
-  validateConfirmPassword(true)  
+  createUserWithEmailAndPassword(auth, form.value.email, form.value.password)
+    .then(async (userCredential) => {
+      console.log("Register success:", userCredential.user)
 
-  if(!errors.value.username && !errors.value.password && !errors.value.confirmPassword )
-  {
-    alert(`Account created for ${registerData.value.username}`)
-  }
- 
+      // create a Firestore doc for this user
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        email: form.value.email,
+        username: "",
+        state: ""
+      })
+
+      alert("Account created!")
+      router.push("/login")
+    })
+    .catch((err) => {
+      console.error("Register failed:", err.code, err.message)
+      errors.value.email = err.message
+    })
 }
 </script>

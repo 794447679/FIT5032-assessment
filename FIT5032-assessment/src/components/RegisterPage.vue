@@ -63,6 +63,8 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 import { db } from "@/firebase"
 import { doc, setDoc } from "firebase/firestore"
 import { useRouter } from "vue-router"
+import eyeOpen from "@/assets/view.png"
+import eyeClosed from "@/assets/hide.png"
 
 // form state
 const form = ref({
@@ -100,10 +102,11 @@ const onRegister = () => {
 
       // create a Firestore doc for this user
       await setDoc(doc(db, "users", userCredential.user.uid), {
-        email: form.value.email,
-        username: "",
-        state: ""
-      })
+      email: form.value.email,
+      username: "",
+      state: "",
+      role: "user"   
+    })
 
       alert("Account created!")
       router.push("/login")

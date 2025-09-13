@@ -9,24 +9,16 @@
         
         <!-- quick table to show current info -->
         <DataTable :value="[profile]" responsiveLayout="scroll" size="small" class="mb-4">
+          <Column field="email" header="Email" />     <!-- email first -->
           <Column field="username" header="Username" />
-          <Column field="email" header="Email" />
           <Column field="state" header="State" />
+          <Column field="role" header="Role" />
         </DataTable>
 
         <h2 class="h5 mb-3">User Profile</h2>
         <div class="border rounded p-3">
-          <div class="mb-4">
-            <label class="form-label" for="username">Username</label>
-            <input
-              id="username"
-              class="form-control"
-              v-model="editData.username"
-              placeholder="Enter username"
-              @input="saved = false"
-            />
-          </div>
 
+          <!-- email is shown at the top and not editable -->
           <div class="mb-4">
             <label class="form-label" for="email">Email</label>
             <input
@@ -34,7 +26,17 @@
               type="email"
               class="form-control"
               v-model="editData.email"
-              placeholder="Enter email"
+              disabled
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label" for="username">Username</label>
+            <input
+              id="username"
+              class="form-control"
+              v-model="editData.username"
+              placeholder="Enter username"
               @input="saved = false"
             />
           </div>
@@ -78,9 +80,10 @@ import Column from "primevue/column"
 
 // data fetched from Firestore
 const profile = reactive({
-  username: "",
   email: "",
-  state: ""
+  username: "",
+  state: "",
+  role: ""
 })
 
 // editable copy (used for form inputs)
@@ -105,7 +108,7 @@ async function fetchProfile() {
   }
 }
 
-// save updated info back to Firestore
+// save updated info back to Firestore (email not changed)
 async function saveProfile() {
   if (!currentUser.value) return
   const uid = currentUser.value.uid
@@ -118,8 +121,9 @@ async function saveProfile() {
 
   await setDoc(doc(db, "users", uid), {
     username: editData.username,
-    email: editData.email,
-    state: editData.state
+    email: editData.email,  // keep original email
+    state: editData.state,
+    role: editData.role
   })
 
   Object.assign(profile, editData)

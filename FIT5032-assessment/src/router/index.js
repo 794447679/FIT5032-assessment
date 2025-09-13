@@ -6,6 +6,7 @@ import RegisterPage from '../components/RegisterPage.vue'
 import UserProfilePage from '../components/UserProfile.vue'
 import AdminProfilePage from '@/components/AdminProfilePage.vue'
 import { currentUser, isAuthenticated, userRole } from "@/authState"
+import Article1 from '@/components/Article1.vue'
 
 const routes = [
   { path: '/', redirect: '/main' },  
@@ -13,7 +14,8 @@ const routes = [
   { path: '/login', name: 'Login', component: LoginPage },
   { path: '/register', name: 'Register', component: RegisterPage },
   { path: '/userprofile', name: 'Userprofile', component: UserProfilePage},
-  { path: '/adminprofile', name: 'Adminprofile', component: AdminProfilePage}
+  { path: '/adminprofile', name: 'Adminprofile', component: AdminProfilePage},
+  { path: '/article1', name: 'Article1', component: Article1}
 ]
 
 const router = createRouter({

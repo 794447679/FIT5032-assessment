@@ -65,6 +65,7 @@ import { doc, setDoc } from "firebase/firestore"
 import { useRouter } from "vue-router"
 import eyeOpen from "@/assets/view.png"
 import eyeClosed from "@/assets/hide.png"
+import axios from "axios"
 
 // form state
 const form = ref({
@@ -106,6 +107,10 @@ const onRegister = () => {
       username: "",
       state: "",
       role: "user"   
+    })
+
+    await axios.post("http://localhost:3000/send-welcome-email", { 
+      email: form.value.email 
     })
 
       alert("Account created!")

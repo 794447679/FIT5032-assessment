@@ -1,7 +1,6 @@
 <template>
   <div>
-    <BHeader />
-
+    
     <section class="main-section">
       <h1>Welcome to Men's Health</h1>
       <p>This is a website that teaches men how to manage their health.</p>
@@ -24,7 +23,7 @@
 </template>
 
 <script setup>
-import BHeader from "@/components/Bheader.vue"
+
 </script>
 
 <style scoped>

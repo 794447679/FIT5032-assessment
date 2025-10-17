@@ -2,19 +2,22 @@
 
 import MainPage from './components/MainPage.vue'
 import LoginPage from './components/LoginPage.vue'
+import BHeader from "@/components/Bheader.vue"
 </script>
 
 <template>
-  
-  <div>
-    <router-view />
-   
-    
+  <BHeader />
 
+  <div class="main-wrapper">
+    <router-view />
   </div>
 </template>
 
 <style scoped>
+.content-area {
+  padding-top: 60px; 
+}
+
 header {
   line-height: 1.5;
 }
@@ -40,5 +43,9 @@ header {
     place-items: flex-start;
     flex-wrap: wrap;
   }
+
+
 }
+
+
 </style>

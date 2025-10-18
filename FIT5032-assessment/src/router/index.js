@@ -10,6 +10,7 @@ import Article1 from '@/components/Article1.vue'
 import WorkOutPlan from '@/components/WorkOutPlan.vue'
 import BMItracker from '@/components/BMItracker.vue'
 import Map from '@/components/Map.vue'
+import DoctorPage from '@/components/DoctorPage.vue'
 
 const routes = [
   { path: '/', redirect: '/main' },  
@@ -21,7 +22,8 @@ const routes = [
   { path: '/article1', name: 'Article1', component: Article1},
   { path: '/workout', name: 'workout', component: WorkOutPlan},
   { path: '/bmi', name: 'BMItracker', component: BMItracker},
-  { path: '/map', name: 'MapPage', component: Map}
+  { path: '/map', name: 'MapPage', component: Map},
+  { path: '/doctor', name: 'DoctorPage', component: DoctorPage}
 ]
 
 const router = createRouter({

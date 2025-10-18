@@ -2,64 +2,31 @@
   <header class="top-bar">
     <nav class="bar-container">
       <div class="nav-group">
-        <div class="site-name">Men's Health</div>
-        <div
-          class="dropdown"
-          @mouseenter="showExercise = true"
-          @mouseleave="hideExercise"
-        >
-          <a href="#" class="nav-link-left dropdown-toggle">
-            Exercise
-          </a>
-          <transition name="fade">
-            <ul
-              v-if="showExercise"
-              class="dropdown-menu show-custom"
-              @mouseenter="cancelHideExercise"
-              @mouseleave="hideExercise"
-            >
-              <li><RouterLink to="/workout" class="dropdown-item">Workout Calories Difference</RouterLink></li>
-              <li><RouterLink to="/mobility" class="dropdown-item">Mobility & Balance</RouterLink></li>
-              <li><RouterLink to="/challenges" class="dropdown-item">Challenges</RouterLink></li>
-            </ul>
-          </transition>
-        </div>
+        <!-- Website title: click to go to /main -->
+        <RouterLink to="/main" class="site-name">Men's Health</RouterLink>
 
-        <!-- Health -->
-        <div
-          class="dropdown"
-          @mouseenter="showHealth = true"
-          @mouseleave="hideHealth"
-        >
-          <a href="#" class="nav-link-left dropdown-toggle">
-            Health Records
-          </a>
-          <transition name="fade">
-            <ul
-              v-if="showHealth"
-              class="dropdown-menu show-custom"
-              @mouseenter="cancelHideHealth"
-              @mouseleave="hideHealth"
-            >
-              <li><RouterLink to="/exerciseplan" class="dropdown-item">My Exercise Plan</RouterLink></li>
-              <li><RouterLink to="/nutritionplan" class="dropdown-item">Nutrition Plan</RouterLink></li>
-              <li><RouterLink to="/bmi" class="dropdown-item">BMI Tracker</RouterLink></li>
-            </ul>
-          </transition>
-        </div>
-
+        <!-- Main navigation links -->
+        <RouterLink to="/workout" class="nav-item">Workout Calories</RouterLink>
+        <RouterLink to="/bmi" class="nav-item">BMI Tracker</RouterLink>
+        <RouterLink to="/doctor" class="nav-item">Doctors</RouterLink>
         <RouterLink to="/map" class="nav-item">Map</RouterLink>
-        
-        <span class="nav-item">About Us</span>
         <RouterLink to="/userprofile" class="nav-item">User Profile</RouterLink>
 
+        <!-- Admin-only link -->
         <RouterLink
           v-if="userRole === 'admin'"
           to="/adminprofile"
           class="nav-item text-danger"
-        >Manage User</RouterLink>
+        >
+          Manage User
+        </RouterLink>
 
-        <RouterLink v-if="!isAuthenticated" to="/login" class="nav-item">Login</RouterLink>
+        <!-- Login / Logout section -->
+        <RouterLink v-if="!isAuthenticated" to="/login" class="nav-item">
+          Login
+        </RouterLink>
+
+        <!-- If logged in, show user info -->
         <div v-else class="user-info">
           <span>👤 {{ currentUser?.email }}</span>
           <button @click="logout">Logout</button>
@@ -70,47 +37,24 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+// import dependencies
 import { getAuth, signOut } from "firebase/auth"
-import { currentUser, isAuthenticated, userRole } from "@/authState"
 import { useRouter } from "vue-router"
+import { currentUser, isAuthenticated, userRole } from "@/authState"
 
 const router = useRouter()
 
-// Exercise nemu status
-const showExercise = ref(false)
-let hideTimerExercise = null
-
-const hideExercise = () => {
-  hideTimerExercise = setTimeout(() => (showExercise.value = false), 200)
-}
-const cancelHideExercise = () => {
-  if (hideTimerExercise) clearTimeout(hideTimerExercise)
-  showExercise.value = true
-}
-
-// Health menu status
-const showHealth = ref(false)
-let hideTimerHealth = null
-
-const hideHealth = () => {
-  hideTimerHealth = setTimeout(() => (showHealth.value = false), 200)
-}
-const cancelHideHealth = () => {
-  if (hideTimerHealth) clearTimeout(hideTimerHealth)
-  showHealth.value = true
-}
-
-// logout
+// logout function
 const logout = () => {
   const auth = getAuth()
   signOut(auth)
-    .then(() => router.push("/"))
+    .then(() => router.push("/")) // redirect to homepage
     .catch((error) => console.error("Logout failed:", error))
 }
 </script>
 
 <style scoped>
+/* ====== Top navigation bar ====== */
 .top-bar {
   width: 100%;
   background-color: #f8f9fa;
@@ -121,11 +65,13 @@ const logout = () => {
   z-index: 1000;
 }
 
+/* Center the content inside navbar */
 .bar-container {
   display: flex;
   justify-content: center;
 }
 
+/* Group of nav items */
 .nav-group {
   display: flex;
   align-items: center;
@@ -133,51 +79,29 @@ const logout = () => {
   gap: 1.2rem;
 }
 
+/* Site title (linked to /main) */
 .site-name {
   font-weight: bold;
   font-size: 1.2rem;
-}
-
-.nav-link-left {
-  text-decoration: none;
   color: #198754;
-  font-weight: 500;
+  text-decoration: none;
 }
-.nav-link-left:hover {
+.site-name:hover {
   text-decoration: underline;
 }
 
-.dropdown-menu.show-custom {
-  display: block;
-  position: absolute;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-top: 0.5rem;
-  min-width: 180px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  z-index: 999;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
+/* General nav links */
 .nav-item {
   color: #0d6efd;
   text-decoration: none;
   cursor: pointer;
+  font-weight: 500;
 }
 .nav-item:hover {
   text-decoration: underline;
 }
 
-
+/* User info and logout button */
 .user-info {
   display: flex;
   align-items: center;

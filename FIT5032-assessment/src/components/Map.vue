@@ -45,6 +45,7 @@
 <script>
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { useRoute } from "vue-router";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiNzk0NDQ3Njc5IiwiYSI6ImNtZ3VqamwzNDBmcnUybW9udjB5Zm5iaGUifQ._38o2XaFmebZJPe_NsCAKw";
@@ -67,16 +68,25 @@ export default {
   },
 
   mounted() {
-    // initialize map
-    this.map = new mapboxgl.Map({
-      container: this.$refs.mapDiv,
-      style: "mapbox://styles/mapbox/streets-v12",
-      center: [144.9631, -37.8136], // Melbourne center
-      zoom: 11,
-    });
+  // initialize map
+  this.map = new mapboxgl.Map({
+    container: this.$refs.mapDiv,
+    style: "mapbox://styles/mapbox/streets-v12",
+    center: [144.9631, -37.8136], // Melbourne center
+    zoom: 11,
+  });
 
-    this.map.addControl(new mapboxgl.NavigationControl());
-  },
+  this.map.addControl(new mapboxgl.NavigationControl());
+
+  // read query parameter from Doctors page
+  const route = useRoute();
+  const destination = route.query.destination;
+  if (destination) {
+    this.toTxt = destination;
+    // auto trigger destination search
+    this.findEnd();
+  }
+},
 
   methods: {
     // simple function to search address

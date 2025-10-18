@@ -9,6 +9,7 @@ import { currentUser, isAuthenticated, userRole } from "@/authState"
 import Article1 from '@/components/Article1.vue'
 import WorkOutPlan from '@/components/WorkOutPlan.vue'
 import BMItracker from '@/components/BMItracker.vue'
+import Map from '@/components/Map.vue'
 
 const routes = [
   { path: '/', redirect: '/main' },  
@@ -19,7 +20,8 @@ const routes = [
   { path: '/adminprofile', name: 'Adminprofile', component: AdminProfilePage},
   { path: '/article1', name: 'Article1', component: Article1},
   { path: '/workout', name: 'workout', component: WorkOutPlan},
-  { path: '/bmi', name: 'BMItracker', component: BMItracker}
+  { path: '/bmi', name: 'BMItracker', component: BMItracker},
+  { path: '/map', name: 'MapPage', component: Map}
 ]
 
 const router = createRouter({

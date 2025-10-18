@@ -47,8 +47,9 @@
             </ul>
           </transition>
         </div>
+
+        <RouterLink to="/map" class="nav-item">Map</RouterLink>
         
-        <span class="nav-item">Start</span>
         <span class="nav-item">About Us</span>
         <RouterLink to="/userprofile" class="nav-item">User Profile</RouterLink>
 

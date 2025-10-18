@@ -114,7 +114,7 @@ const onRegister = () => {
     })
 
       alert("Account created!")
-      router.push("/login")
+      router.push("/main")
     })
     .catch((err) => {
       console.error("Register failed:", err.code, err.message)
